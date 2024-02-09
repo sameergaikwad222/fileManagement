@@ -8,6 +8,10 @@
     "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sameergaikwad222/fileManagement.git"
+  },
   "author": "Sameer Gaikwad",
   "license": "ISC",
   "dependencies": {
@@ -19,5 +23,9 @@
   },
   "devDependencies": {
     "eslint": "^8.56.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/sameergaikwad222/fileManagement/issues"
+  },
+  "homepage": "https://github.com/sameergaikwad222/fileManagement#readme"
 }

@@ -1,0 +1,18 @@
+{
+  "port": 3000,
+  "user": {
+    "roles": ["customer", "owner", "admin"]
+  },
+  "database": {
+    "url": "mongodb://admin:password@localhost:27017/?authMechanism=DEFAULT"
+  },
+  "password": {
+    "default": "default123",
+    "secreteKey": "e4dcc6a3817dd935dc4dd427634dfc73674c5211bb30a910a35002fac52ab6cd"
+  },
+  "tokens": {
+    "tokensecrete": "4d5ea37236d762137ec249ea10389f35502d05d902019f54619060a5499e8f2af342e961e907f29b9ee7f0a8c9f2ccef62d9f83a0c699dd64d6da99756e30e16",
+    "refreshtokensecrete": "97933b328830562074e1eb94955fa5e07a5860bf0427551d2d4a898137ae10a45dac1ae43883c5088ae000b6c0608c5ac026e5c3eb000d8e1d081b76e6b3f15f",
+    "expiry": "2m"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "filemanagement",
+  "version": "1.0.0",
+  "description": "this project is for File Management which are being uploaded to Server",
+  "main": "app.js",
+  "scripts": {
+    "start": "node --watch app.js",
+    "lint": "eslint .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sameer Gaikwad",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.1.1",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0"
+  }
+}

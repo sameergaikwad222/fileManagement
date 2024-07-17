@@ -7,6 +7,15 @@ const {
   createHashedPassword,
   generateAccessToken,
 } = require("../utils/helper");
+const { logger } = require("../utils/logs");
+
+// const Joi = require("joi");
+
+// const joiSchema = Joi.object({
+//   name: Joi.string().alphanum().min(3).max(100),
+//   phoneNumber: Joi.string().max(10),
+//   password: Joi.string().min(6).pattern(new RegExp(`^.*#@.*$`)).required(),
+// });
 
 // ======================================= Users CRUD Sections =======================================
 
@@ -40,6 +49,7 @@ async function getFilteredUser(req, res) {
       });
     }
   } catch (error) {
+    logger.error(error.message);
     return res.status(constants.status.code.INTERNAL_SERVER_ERROR).json({
       status: constants.status.code.INTERNAL_SERVER_ERROR,
       message: constants.status.message.INTERNAL_SERVER_ERROR,
@@ -73,7 +83,8 @@ async function getSingleUser(req, res) {
       data: user,
     });
   } catch (error) {
-    console.log("Error while querying database", error.message);
+    logger.error("Error while querying database");
+    logger.error(error.message);
     return res.status(constants.status.code.INTERNAL_SERVER_ERROR).json({
       status: constants.status.code.INTERNAL_SERVER_ERROR,
       message: constants.status.message.INTERNAL_SERVER_ERROR,
@@ -136,6 +147,7 @@ async function updateSingleUser(req, res) {
       data: resp,
     });
   } catch (error) {
+    logger.error(error.message);
     return res.status(constants.status.code.INTERNAL_SERVER_ERROR).json({
       status: constants.status.code.INTERNAL_SERVER_ERROR,
       message: constants.status.message.INTERNAL_SERVER_ERROR,
@@ -157,6 +169,9 @@ const addMultipleUsers = async (req, res) => {
     //Hashing Users password
     users.forEach((user) => {
       user.password = createHashedPassword(user.password);
+      user["contactDetails"] = {
+        phoneNumber: user.phoneNumber,
+      };
     });
 
     try {
@@ -175,6 +190,7 @@ const addMultipleUsers = async (req, res) => {
         });
       }
     } catch (error) {
+      logger.error(error.message);
       return res.status(constants.status.code.INTERNAL_SERVER_ERROR).json({
         status: constants.status.code.INTERNAL_SERVER_ERROR,
         message: constants.status.message.INTERNAL_SERVER_ERROR,
@@ -236,6 +252,7 @@ const updateMultipleUsers = async (req, res) => {
       data: result,
     });
   } catch (error) {
+    logger.error(error.message);
     return res.status(constants.status.code.INTERNAL_SERVER_ERROR).json({
       status: constants.status.code.INTERNAL_SERVER_ERROR,
       message: constants.status.message.INTERNAL_SERVER_ERROR,
@@ -263,6 +280,7 @@ const deleteMultipleUsers = async (req, res) => {
       data: result,
     });
   } catch (error) {
+    logger.error(error.message);
     return res.status(constants.status.code.INTERNAL_SERVER_ERROR).json({
       status: constants.status.code.INTERNAL_SERVER_ERROR,
       message: constants.status.message.INTERNAL_SERVER_ERROR,
@@ -274,6 +292,15 @@ const deleteMultipleUsers = async (req, res) => {
 // ======================================= Authorization & Aunthentication Section =======================================
 
 const authenticateUser = async (req, res) => {
+  // const resp = joiSchema.validate(req.body);
+
+  // if (resp.error && res.error !== "") {
+  //   return res.status(400).json({
+  //     status: "failed",
+  //     message: resp.error,
+  //   });
+  // }
+
   const { phoneNumber, password } = req.body;
   const mobileReg = /[0-9]{10}/g;
   //Check if invalid mobile
@@ -315,7 +342,8 @@ const authenticateUser = async (req, res) => {
         identifier: user._id,
       });
     } catch (error) {
-      console.log("Error while checking existing tokens", error.message);
+      logger.error(error.message);
+      logger.error("Error while checking existing tokens");
     }
 
     //create JWT token for authenticated user
@@ -341,7 +369,7 @@ const authenticateUser = async (req, res) => {
         data: resp,
       });
     } catch (error) {
-      console.log(error.message);
+      logger.error(error.message);
       return res.status(constants.status.code.INTERNAL_SERVER_ERROR).json({
         status: "failed",
         message: "Error while generating tokens",
@@ -349,7 +377,7 @@ const authenticateUser = async (req, res) => {
       });
     }
   } else {
-    return res.status(constants.status.BAD_REQUEST).json({
+    return res.status(constants.status.code.BAD_REQUEST).json({
       status: "failed",
       message: "Password doesn't match.",
       data: {},
@@ -410,7 +438,8 @@ const getNewToken = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(
+    logger.error(error.message);
+    logger.error(
       "Error while fetching token details. Kindly relogin and get one"
     );
     return res.status(constants.status.code.INTERNAL_SERVER_ERROR).json({
@@ -442,7 +471,8 @@ const deAuthenticateUser = async (req, res) => {
       data: {},
     });
   } catch (error) {
-    console.log("Error while deleting tokens", error.message);
+    logger.error(error.message);
+    logger.error("Error while deleting tokens");
     return res.status(constants.status.code.INTERNAL_SERVER_ERROR).json({
       status: "failed",
       message: "Error while logging out",

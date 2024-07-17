@@ -1,5 +1,5 @@
 const { error } = require("console");
-
+const { logger } = require("../utils/logs");
 const fs = require("fs").promises;
 
 // ========================================= File Operations =========================================
@@ -13,7 +13,8 @@ async function handleUploadFile(req, res) {
       originalname: req?.file?.originalname || "",
     });
   } catch (error) {
-    console.log("handleUploadFile>Error", error.message);
+    logger.error(error.message);
+    logger.error("handleUploadFile>Error");
     return res.status(500).json({ status: "Failed", error: error.message });
   }
 }
@@ -33,7 +34,7 @@ async function getFilesDetails(req, res) {
   }
 
   const filePath =
-    foldertype === "all"
+    foldertype == "all"
       ? "./src/storage/uploads/"
       : `./src/storage/uploads/${foldertype}`;
   try {
@@ -42,7 +43,8 @@ async function getFilesDetails(req, res) {
       return res.status(200).json({ status: "Success", data: files });
     else return res.status(404).json({ status: "Success", data: null });
   } catch (error) {
-    console.log("getFilesDetails>Error", error.message);
+    logger.error(error.message);
+    logger.error("getFilesDetails>Error", error.message);
     return res.status(500).json({ status: "Failed", message: error.message });
   }
 }
@@ -66,7 +68,7 @@ async function deleteFileHandler(req, res) {
 
   fs.unlink(`./src/storage/uploads${filePath}`, (err) => {
     if (err) {
-      console.log(error.message);
+      logger.error(error.message);
       return res.status(500).json({ message: "Error while deleting file" });
     }
   });

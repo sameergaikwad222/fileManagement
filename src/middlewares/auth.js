@@ -1,6 +1,7 @@
 const constants = require("../constants/constant.json");
 var jwt = require("jsonwebtoken");
 const config = require("../configs/config.json");
+const { logger } = require("../utils/logs");
 
 const checkAuthorization = function (req, res, next) {
   let token;
@@ -24,7 +25,7 @@ const checkAuthorization = function (req, res, next) {
     req.headers.identifier = identifier;
     next();
   } catch (error) {
-    console.log(error.message);
+    logger.error(error.message);
     return res.status(constants.status.code.UNAUTHORIZED).json({
       status: "failed",
       message: "Unauthorized.Token Expired",

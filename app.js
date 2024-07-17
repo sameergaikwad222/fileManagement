@@ -5,6 +5,7 @@ const PORT = config?.port || 3000;
 const { fileRouter, userRouter } = require("./src/routes");
 const { routeLogger } = require("./src/middlewares/routeLogger");
 const { connectDatabase } = require("./src/database/connectDB");
+const { logger } = require("./src/utils/logs");
 
 // global middlewares
 app.use(express.json());
@@ -19,10 +20,11 @@ async function initApp() {
   try {
     await connectDatabase();
     app.listen(PORT, () =>
-      console.log(`App is running on http://localhost:${PORT}`)
+      logger.info(`App is running on http://localhost:${PORT}`)
     );
   } catch (error) {
-    console.log("Error while starting an application", error.message);
+    logger.error("Error while starting an application");
+    logger.error(error.message);
   }
 }
 

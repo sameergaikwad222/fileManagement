@@ -1,13 +1,14 @@
 const config = require("../configs/config.json");
 const mongoose = require("mongoose");
+const { logger } = require("../utils/logs");
 async function connectDatabase() {
   try {
     await mongoose.connect(config.database.url, {
       dbName: "users",
     });
-    console.log("Connect to database successfully");
+    logger.info("Connect to database successfully");
   } catch (error) {
-    console.log(error.message);
+    logger.error(error.message);
     throw error;
   }
 }

@@ -1,5 +1,8 @@
 node_modules
+*.log
 *.logs
+combined.log
+error.log
 .vscode
 
 

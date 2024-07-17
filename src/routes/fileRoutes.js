@@ -7,6 +7,7 @@ const {
   getFilesDetails,
   deleteFileHandler,
 } = require("../controllers/fileController");
+const { logger } = require("../utils/logs");
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     let uploadPath = "./src/storage"; // Default upload path
@@ -24,7 +25,7 @@ const storage = multer.diskStorage({
     } else {
       uploadPath = "./src/storage/uploads/others";
     }
-    console.log(`File uploaded in ${uploadPath}`);
+    logger.info(`File uploaded in ${uploadPath}`);
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
@@ -37,9 +38,10 @@ const upload = multer({
 
 const { limiter } = require("../middlewares/rateLimiter");
 const { checkAuthorization } = require("../middlewares/auth");
-
+const { routeLogger } = require("../middlewares/routeLogger");
 //  Middlewares
 fileRouter.use(limiter);
+fileRouter.use(routeLogger);
 fileRouter.use(checkAuthorization);
 fileRouter.use(express.urlencoded({ extended: false }));
 
@@ -47,7 +49,6 @@ fileRouter.use(express.urlencoded({ extended: false }));
 fileRouter.post("/upload", upload.single("sample"), handleUploadFile);
 
 fileRouter.get("/all", getFilesDetails);
-fileRouter.get("/:filepath", getFilesDetails);
 
 fileRouter.delete("/", deleteFileHandler);
 
